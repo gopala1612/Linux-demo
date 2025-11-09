@@ -1,0 +1,31 @@
+- hosts: all
+  remote_user: ec2-user
+  become: yes
+  vars_files:
+    vault-pass.yaml
+  tasks:
+  - name: trying out echo command
+    debug:
+      msg: "Hello my username is {{ username }} & pass is {{ password }}"
+
+
+
+#ansible-vault encrypt pass.yaml
+#ansible-vault decrypt pass.yaml
+#ansible-playbook -i hosts pass.yaml ( --ask-vault-password)
+#ansible all -i slave.txt -m copy -a "src=/hoe/ec2user dest=/vr/www/html" ADHOC cmd -b to att port
+#present-install ab-un st-started dtopped restarted
+#ansible all -i slave.txt -m ping 
+#ansible all -i slave.txt -m yum -a "name=httpd state=present" -e "port=9000" to change a port
+#ansible all -i slave.txt -m service -a "name=httpd state=started"
+#ansible-vault view  vaultpass.yaml / cat vaultpass.yaml
+# scp ec2@ip addr src des
+#lineinlife ping yum apt copy service template unarchive get-uer 
+#ansible-galaxy init apache(folder for re usability)
+#under name 
+#  #tags:
+    # - update java
+  #ignore_error:yes
+  #ansilbe-os family to use multo os define
+#ansible-playbook -i hosts pass.yaml --tags update
+#ansible-playbook -i hosts pass.yaml --skip-tags update

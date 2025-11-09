@@ -1,0 +1,40 @@
+- hosts: all
+  remote_user: ec2-user
+  become: yes
+  vars:
+    tomcat_port: 7788
+  tasks:
+  - name: upgrade all packages
+    yum:
+      name: '*'
+      state: latest
+  - name: installing java 17
+    yum:
+      name: java-17.0.16+8-openjdk
+      state: present
+  - name: Download tomcat
+    get_url:
+      url: https://downloads.apache.org/tomcat/tomcat-9/v9.0.111/bin/apache-tomcat-9.0.111.tar.gz.asc
+      dest: /opt
+      mode: '777'
+  - name: Extract tar file
+    unarchive:
+      src: /opt/apache-tomcat.gz
+      dest: /opt
+      remote_src: yes
+      mode: '777'
+  - name: changing server.xml.j2 port no
+    template:
+      src: /mytemplates/foo.j2
+      dest: /opt/apache-tomact/conf/server.xml
+      mode: '0777'
+  - name: stopping tomcat
+    shell: nohup /opt/apache-tomact/bin/startup.sh &
+  - name: stating tomcat
+    ansible.builtin.shell: nohup /opt/apache-tomact/bin/startup.sh &
+  - name: Copy file with owner and permissions
+    copy:
+      src: /home/ec2-user/index.html
+      dest: /var/www/html/webapps
+      mode: '777'
+
